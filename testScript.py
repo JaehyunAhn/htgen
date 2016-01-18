@@ -10,7 +10,9 @@ import jpype
 
 def do_concurrent_tagging(start, end, lines, result):
     jpype.attachThreadToJVM()
-    l = [k.pos(lines[i]) for i in range(start, end)]
+    l = [k.sentences(lines[i]) for i in range(start, end)]
+    result.append(l)
+    l = [k.nouns(lines[i]) for i in range(start, end)]
     result.append(l)
     return
 
@@ -20,7 +22,8 @@ if __name__ == "__main__":
     # Read Docs
     print('Number of lines in document:')
     k = Kkma()
-    lines = kolaw.open('constitution.txt').read().splitlines()
+    f = open('test.txt', 'r')
+    lines = f.read().splitlines()
     nlines = len(lines)
     print(nlines)
 
@@ -28,12 +31,15 @@ if __name__ == "__main__":
     print('Concurrent Tagging:')
     t0 = time.time()
     result = []
-    t1 = Thread(target=do_concurrent_tagging, args=(0, int(nlines/2), lines, result))
-    t2 = Thread(target=do_concurrent_tagging, args=(int(nlines/2), nlines, lines, result))
-    t1.start(); t2.start()
-    t1.join(); t2.join()
+    t1 = Thread(target=do_concurrent_tagging, args=(0, int(nlines/4), lines, result))
+    t2 = Thread(target=do_concurrent_tagging, args=(int(nlines/4), int(nlines*2/4), lines, result))
+    t3 = Thread(target=do_concurrent_tagging, args=(int(nlines*2/4), int(nlines*3/4), lines, result))
+    t4 = Thread(target=do_concurrent_tagging, args=(int(nlines*3/4), nlines, lines, result))
+    t1.start(); t2.start(); t3.start(); t4.start()
+    t1.join(); t2.join(); t3.join(); t4.join()
 
     # Print Time: T
     m = sum(result, [])
     print(time.time() - t0)
+    f.close()
     print(m)
