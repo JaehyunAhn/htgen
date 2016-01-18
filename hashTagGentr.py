@@ -54,7 +54,7 @@ if __name__ == "__main__":
     # Result processing
     m_nouns = sum(nouns, [])
     m_sentences = sum(sentences, [])
-
+    print('Hashtags(#) will be:')
     # Hashtag for Nouns
     cnt = Counter()
     for i in range(len(m_nouns)):
@@ -67,8 +67,13 @@ if __name__ == "__main__":
     # Hashtag for Sentences <= 20
     for i in range(len(m_sentences)):
         for j in range(len(m_sentences[i])):
-            if(len(m_sentences[i][j]) <= 20):
+            if((len(m_sentences[i][j]) <= 20) & (len(m_sentences[i][j]) >= 2)):
                 #print(m_sentences[i][j])
                 # if user wants to _ or ' '(blank), then replace it!
                 # replace(origin, replace, count)
-                print('#' + str(m_sentences[i][j]).replace(' ', ''))
+                target_sentences = str(m_sentences[i][j]).replace(' ', '')
+                target_sentences = target_sentences.replace('.', '')
+                # target_sentences = target_sentences.replace('“','')
+                # target_sentences = target_sentences.replace('”','')
+                # target_sentences = target_sentences.replace("'",'')
+                print('#' + target_sentences)
