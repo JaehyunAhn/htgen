@@ -4,7 +4,6 @@ __author__ = 'Sogo'
 
 # To parallel processing
 from konlpy.tag import Kkma
-from konlpy.corpus import kolaw
 from threading import Thread
 import jpype
 
